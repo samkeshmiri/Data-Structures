@@ -29,6 +29,64 @@ public class BasicBinaryTree<T extends Comparable<T>> {
 		}
 		return false;
 	}
+	
+	public boolean delete(T item) {
+		boolean deleted = false;
+		
+		if (this.root == null) {
+			return false;
+		}
+		
+		Node currentNode = getNode(item);
+		
+		if (currentNode != null) {
+			//if the node has no children, delete it
+			if (currentNode.getLeft() == null && currentNode.getRight() == null) {
+				unlink(currentNode, null);
+				deleted = true;
+			} else if (currentNode.getLeft() == null && currentNode.getRight() != null) {
+				// if the node only has a right child, remove it in hierarchy
+				unlink(currentNode, currentNode.getRight()); // getting right child and replacing it where it was
+				deleted = true;
+			} else if (currentNode.getRight() == null && currentNode.getLeft() != null) {
+				// if the node only has a left child, remove it in hierarchy
+				unlink(currentNode, currentNode.getLeft()); // getting right child and replacing it where it was
+				deleted = true;	
+			} else {
+				// the node has both children, do a node swap to delete
+				// swap out right most node on the left side
+				Node child = currentNode.getLeft();
+				while(child.getRight() != null && child.getLeft() != null) {
+					child = child.getRight();
+				}
+				
+				child.getParent().setRight(null); // remove from current position
+				child.setLeft(currentNode.getLeft());
+				child.setRight(currentNode.getRight());
+				unlink(currentNode, child);
+				deleted = true;
+			}
+		}
+		
+		if (deleted) {
+			size--;
+		}
+		
+		
+		return deleted;
+	}
+	
+	private void unlink(Node currentNode, Node newNode) {
+		if(currentNode == this.root) {
+			newNode.setLeft(currentNode.getLeft());
+			newNode.setRight(currentNode.getRight());
+			this.root = newNode;
+		} else if (currentNode.getParent().getRight() == currentNode) {
+			currentNode.getParent().setRight(newNode);
+		} else {
+			currentNode.getParent().setLeft(newNode);
+		}
+	}
 
 	public Node getNode(T item) {
 		Node currentNode = this.root;

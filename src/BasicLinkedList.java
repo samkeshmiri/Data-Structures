@@ -32,6 +32,8 @@ public class BasicLinkedList<T> {
 			throw new IllegalStateException("No nodes in list");
 		} else {
 			T item = first.getNodeItem();
+			//update first pointer to become the next one
+			first = first.getNextNode();
 			nodeCount--;
 			return item;
 		}
@@ -148,13 +150,17 @@ public class BasicLinkedList<T> {
 	
 	public static void main(String[] args) {
 		BasicLinkedList<Integer> list = new BasicLinkedList<Integer>();
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			list.add(i);
 		}
+		System.out.println(list.toString());
 		System.out.println(list.size());
-		System.out.println(list.removeAt(50));
+		System.out.println(list.remove());
 		System.out.println(list.size());
-		System.out.println(list.find(40)); 
+		System.out.println(list.toString());
+		System.out.println(list.removeAt(5));
+		System.out.println(list.size());
+		System.out.println(list.find(4)); 
 	}
 	
 	

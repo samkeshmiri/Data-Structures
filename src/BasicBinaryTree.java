@@ -24,23 +24,23 @@ public class BasicBinaryTree<T extends Comparable<T>> {
 	public boolean contains(T item) {
 		// can do null check too
 		Node nodeItem = getNode(item);
-		if (nodeItem.getItem() == item) {
+		if (nodeItem != null) {
 			return true;
 		}
 		return false;
 	}
-	
+
 	public boolean delete(T item) {
 		boolean deleted = false;
-		
+
 		if (this.root == null) {
 			return false;
 		}
-		
+
 		Node currentNode = getNode(item);
-		
+
 		if (currentNode != null) {
-			//if the node has no children, delete it
+			// if the node has no children, delete it
 			if (currentNode.getLeft() == null && currentNode.getRight() == null) {
 				unlink(currentNode, null);
 				deleted = true;
@@ -51,15 +51,15 @@ public class BasicBinaryTree<T extends Comparable<T>> {
 			} else if (currentNode.getRight() == null && currentNode.getLeft() != null) {
 				// if the node only has a left child, remove it in hierarchy
 				unlink(currentNode, currentNode.getLeft()); // getting right child and replacing it where it was
-				deleted = true;	
+				deleted = true;
 			} else {
 				// the node has both children, do a node swap to delete
 				// swap out right most node on the left side
 				Node child = currentNode.getLeft();
-				while(child.getRight() != null && child.getLeft() != null) {
+				while (child.getRight() != null && child.getLeft() != null) {
 					child = child.getRight();
 				}
-				
+
 				child.getParent().setRight(null); // remove from current position
 				child.setLeft(currentNode.getLeft());
 				child.setRight(currentNode.getRight());
@@ -67,17 +67,16 @@ public class BasicBinaryTree<T extends Comparable<T>> {
 				deleted = true;
 			}
 		}
-		
+
 		if (deleted) {
 			size--;
 		}
-		
-		
+
 		return deleted;
 	}
-	
+
 	private void unlink(Node currentNode, Node newNode) {
-		if(currentNode == this.root) {
+		if (currentNode == this.root) {
 			newNode.setLeft(currentNode.getLeft());
 			newNode.setRight(currentNode.getRight());
 			this.root = newNode;
@@ -174,7 +173,6 @@ public class BasicBinaryTree<T extends Comparable<T>> {
 
 		public void setItem(T item) {
 			this.item = item;
-
 		}
 
 		public int getCount() {
@@ -185,6 +183,21 @@ public class BasicBinaryTree<T extends Comparable<T>> {
 			this.count = count;
 		}
 
+	}
+
+	public static void main(String[] args) {
+		BasicBinaryTree<Integer> tree = new BasicBinaryTree<>();
+		for (int i = 0; i < 10; i++) {
+			tree.add(i);
+		}
+
+		System.out.println(tree.size());
+		tree.add(101);
+		System.out.println(tree.contains(66));
+		// System.out.println(tree.delete(50));
+		// System.out.println(tree.delete(51));
+		// System.out.println(tree.contains(50));
+		// System.out.println(tree.size());
 	}
 
 }
